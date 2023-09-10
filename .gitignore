@@ -38,3 +38,5 @@ MANIFEST.in
 pip-wheel-metadata
 
 poetry/core/*
+
+*.db
