@@ -1,5 +1,4 @@
-from sqlmodel import create_engine, SQLModel
-
+from sqlmodel import SQLModel, create_engine
 
 sqlite_file_name = "database.db"
 sqlite_url = f"sqlite:///{sqlite_file_name}"
