@@ -1,9 +1,7 @@
-from datetime import datetime
-from sqlmodel import Field, SQLModel  # type:ignore
+import datetime
 from enum import StrEnum
 
-
-tableName = "transactions"
+from sqlmodel import Field, SQLModel  # type:ignore
 
 
 class TransactionType(StrEnum):
@@ -13,9 +11,9 @@ class TransactionType(StrEnum):
 
 class TransactionBase(SQLModel):
     description: str | None = None
-    amount: int = 1
-    date: datetime = datetime.now()
-    bussiness: str | None = None
+    amount: float = 1
+    date: datetime.date | None = datetime.date.today()
+    business: str | None = None
     type: TransactionType = TransactionType.Expense
 
 
@@ -25,8 +23,14 @@ class Transaction(TransactionBase, table=True):
 
 
 class TransactionRecieve(TransactionBase):
-    pass
+    type: TransactionType = TransactionType.Expense
 
 
 class TransactionSend(TransactionBase):
     id: int = Field(primary_key=True)
+
+
+class TransactionUpdate(TransactionBase):
+    description: str | None = None
+    date: datetime.date | None = None
+    business: str | None = None
