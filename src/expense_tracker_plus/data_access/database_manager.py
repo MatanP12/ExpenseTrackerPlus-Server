@@ -1,9 +1,8 @@
-from sqlmodel import Session, create_engine, SQLModel
+from sqlmodel import Session, SQLModel, create_engine
 
 
 class DatabaseManager:
-    _sqlite_file_name = "database.db"
-    _sqlite_url = f"sqlite:///{_sqlite_file_name}"
+    postgresql_url = "postgresql://postgres:1234@localhost:5432/expense_tracker"
     _instance = None
 
     def __new__(cls):
@@ -13,7 +12,7 @@ class DatabaseManager:
         return cls._instance
 
     def init(self):
-        self.engine = create_engine(url=self._sqlite_url, echo=True)
+        self.engine = create_engine(url=self.postgresql_url, echo=True)
 
     def create_session(self) -> Session:
         return Session(self.engine)
