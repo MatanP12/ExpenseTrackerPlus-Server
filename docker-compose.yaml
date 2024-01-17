@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  api:
+    build: 
+      dockerfile: Dockerfile
+    container_name: api_development_container
+    ports:
+      - '8000:8000'
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DB_SERVICE=docker
+    volumes:
+      - ./src/expense_tracker_plus:/app/expense_tracker_plus
+    command: uvicorn expense_tracker_plus.main:app --host 0.0.0.0 --port 8000 --reload
+  db:
+    image: postgres:16.1-alpine3.19
+    container_name: postgres16
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    expose:
+      - '5432:5432'
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      interval: 3s
+      timeout: 5s
+      retries: 5
+    environment:
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=expense_tracker
+      
+volumes:
+  postgres_data:
